@@ -17,8 +17,17 @@ A TamperMonkey extension that helps identify highly biased positions via sentime
 
 ## Installation
 
+### One-Click Install
+
+[![Install with TamperMonkey](https://img.shields.io/badge/Install%20with%20TamperMonkey-800000.svg?style=for-the-badge&logo=tampermonkey)](https://github.com/elijah/tampermonkey-bias-and-sentiment-visualizer/raw/master/src/index.js)
+
+Click the button above to install the extension directly in TamperMonkey. TamperMonkey will prompt you to confirm the installation.
+
+### Manual Installation
+
 1. Install [TamperMonkey](https://www.tampermonkey.net/) browser extension
-2. Install this userscript by clicking the "Install" button on the GitHub page or manually adding the script URL
+2. Open the userscript file: [src/index.js](https://github.com/elijah/tampermonkey-bias-and-sentiment-visualizer/blob/master/src/index.js)
+3. Click the "Install" button in TamperMonkey
 
 ## Development Setup
 
