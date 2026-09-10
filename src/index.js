@@ -6,6 +6,9 @@
 // @author       You
 // @match        https://www.facebook.com/*
 // @match        https://*.facebook.com/*
+// @require      https://raw.githubusercontent.com/elijah/tampermonkey-bias-and-sentiment-visualizer/master/src/config.js
+// @require      https://raw.githubusercontent.com/elijah/tampermonkey-bias-and-sentiment-visualizer/master/src/sentiment.js
+// @require      https://raw.githubusercontent.com/elijah/tampermonkey-bias-and-sentiment-visualizer/master/src/ui.js
 // @grant        none
 // @icon         data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAOAOw==
 // ==/UserScript==
