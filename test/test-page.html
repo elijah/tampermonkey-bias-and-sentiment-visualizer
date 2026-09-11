@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bias & Sentiment Visualizer - Test Page</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+    .test-post { background: #f5f5f5; padding: 15px; margin: 10px 0; border-radius: 8px; }
+    .test-post h3 { margin-top: 0; }
+    .bias-score { font-size: 0.8em; color: #666; margin-top: 5px; }
+    .highlighted { padding: 2px 4px; border-radius: 2px; }
+    .controls { background: #e3f2fd; padding: 15px; margin-bottom: 20px; border-radius: 8px; }
+    .controls label { display: block; margin: 8px 0; }
+    button { padding: 8px 16px; margin-right: 10px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>TamperMonkey Bias & Sentiment Visualizer - Test Page</h1>
+  
+  <div class="controls">
+    <label>
+      <input type="checkbox" id="use-tampermonkey" checked>
+      Run TamperMonkey extension (if installed)
+    </label>
+    <button onclick="runTest()">Run Bias Analysis</button>
+    <button onclick="clearHighlights()">Clear Highlights</button>
+    <span id="stats"></span>
+  </div>
+
+  <h2>Test Posts</h2>
+  
+  <div class="test-post" data-bias="high">
+    <h3>Post 1 (High Bias Expected)</h3>
+    <p>The radical leftists are destroying our country with their insane policies. These fake news reporters are liars and frauds who want to destroy the economy and flood our borders with invaders. We need to eliminate this threat immediately before it's too late!</p>
+    <div class="bias-score">Expected: Multiple red highlights</div>
+  </div>
+
+  <div class="test-post" data-bias="medium">
+    <h3>Post 2 (Medium Bias Expected)</h3>
+    <p>I'm concerned about the border crisis and the fact that Democrats want to give amnesty to illegal immigrants. This will destroy our economy and cause a financial crisis. We need to build the wall and enforce immigration laws.</p>
+    <div class="bias-score">Expected: Orange/yellow highlights on key terms</div>
+  </div>
+
+  <div class="test-post" data-bias="low">
+    <h3>Post 3 (Low Bias Expected)</h3>
+    <p>I think we should have a balanced approach to immigration reform that considers both security concerns and humanitarian needs. The current system needs some improvements.</p>
+    <div class="bias-score">Expected: Few or no highlights</div>
+  </div>
+
+  <div class="test-post" data-bias="medium">
+    <h3>Post 4 (Medium Bias - Political)</h3>
+    <p>The election was stolen by voter fraud and dead people voting. The deep state and mainstream media are covering up the rigged election to protect the corrupt establishment. We need to fight back!</p>
+    <div class="bias-score">Expected: Red highlights on fraud-related terms</div>
+  </div>
+
+  <div class="test-post" data-bias="low">
+    <h3>Post 5 (Low Bias - Neutral)</h3>
+    <p>I attended a local community meeting yesterday to discuss neighborhood improvements. The city council is considering some proposals for park renovation and road maintenance.</p>
+    <div class="bias-score">Expected: No highlights</div>
+  </div>
+
+  <div class="test-post" data-bias="high">
+    <h3>Post 6 (High Bias - Health)</h3>
+    <p>The plandemic is a hoax created by Bill Gates to implant microchips in people through the vaccine. This fake pandemic is being used to control the population and destroy our freedoms.</p>
+    <div class="bias-score">Expected: Red highlights on plandemic/hoax/microchip</div>
+  </div>
+
+  <script>
+    // Simple client-side analyzer for testing (mirrors TamperMonkey behavior)
+    function analyzePost(text) {
+      const negativeWords = new Set([
+        'destroy', 'eliminate', 'dangerous', 'threat', 'criminal', 'illegal',
+        'invasion', 'flood', 'crisis', 'emergency', 'disaster', 'catastrophe',
+        'radical', 'extremist', 'fanatic', 'terrorist', 'invader', 'alien',
+        'disgusting', 'appalling', 'shocking', 'horrifying', 'outrageous',
+        'lie', 'liar', 'fake', 'fraud', 'corrupt', 'crooked', 'evil',
+        'terrible', 'awful', 'horrible', 'dreadful', 'wretched', 'atrocious',
+        'toxic', 'poisonous', 'harmful', 'destructive', 'ruinous',
+        'nuclear', 'war', 'kill', 'murder', 'death', 'die', 'dying',
+        'stupid', 'idiot', 'fool', 'crazy', 'insane', 'mad',
+        'socialist', 'communist', 'marxist', 'liberal', 'progressive',
+        'fascist', 'dictator', 'tyrant', 'authoritarian', 'totalitarian',
+        'woke', 'cancel culture', 'politically correct', 'snowflake', 'triggered',
+        'deep state', 'globalist', 'elite', 'establishment', 'swamp',
+        'fake news', 'mainstream media', 'lamestream', 'propaganda',
+        'brainwashed', 'sheeple', 'cult', 'cultist',
+        'treason', 'traitor', 'communist', 'marxist', 'bolshevik',
+        'nazi', 'fascist', 'hitler', 'holocaust denier',
+        'racist', 'white supremacist', 'nazi', 'kkk',
+        'anti-american', 'unamerican', 'traitorous',
+        'communist china', 'china virus', 'kung flu',
+        'open borders', 'amnesty', 'anchor baby', 'chain migration',
+        'defund police', 'acab', 'all cops are bastards',
+        'black lives matter', 'blm', 'antifa', 'fascist',
+        'election fraud', 'stolen election', 'rigged election',
+        'voter fraud', 'illegal voting', 'dead people voting',
+        'plandemic', 'hoax', 'scamdemic', 'fake pandemic',
+        'microchip', 'tracking device', 'vaccine passport',
+        'mark of the beast', '666', 'antichrist',
+        'abortion', 'baby killer', 'pro-life', 'pro-choice',
+        'gun control', 'gun grabber', '2nd amendment',
+        'climate change hoax', 'global warming scam',
+        'transgender', 'trans agenda', 'groomer', 'pedophile',
+        'critical race theory', 'crt', 'systemic racism',
+        'white privilege', 'reverse racism',
+        'me too', 'times up', 'sexual harassment',
+        'rape culture', 'toxic masculinity',
+        'israel', 'palestine', 'zionist', 'anti-semite',
+        'muslim ban', 'sharia law', 'jihad',
+        'build the wall', 'mexico pays for it',
+        'caravan', 'invaders', 'illegals', 'wetback',
+        'anchor baby', 'birthright citizenship',
+        'chain migration', 'visa lottery',
+        'sanctuary city', 'catch and release',
+        'asylum seekers', 'refugee crisis',
+        'border surge', 'human trafficking',
+        'drug cartel', 'narco state',
+        'china virus', 'wuhan lab', 'gain of function',
+        'fauci', 'bill gates', 'microchip vaccine',
+        'vaccine mandate', 'vaccine passport',
+        'medical tyranny', 'health passport',
+        'lockdown', 'social distancing', 'mask mandate',
+        'vaxxed', 'anti-vaxxer', 'vaxxhole',
+        'herd immunity', 'natural immunity'
+      ]);
+
+      const words = text.toLowerCase().match(/\b[\w'-]+\b/g) || [];
+      let negativeCount = 0;
+      let matchedWords = [];
+
+      words.forEach(word => {
+        if (negativeWords.has(word)) {
+          negativeCount++;
+          matchedWords.push(word);
+        }
+      });
+
+      // Check for phrases
+      const phrases = ['fake news', 'mainstream media', 'deep state', 'cancel culture', 
+                       'critical race theory', 'climate change hoax', 'plandemic',
+                       'election fraud', 'stolen election', 'build the wall',
+                       'chain migration', 'anchor baby', 'sanctuary city',
+                       'catch and release', 'voter fraud', 'dead people voting'];
+      
+      phrases.forEach(phrase => {
+        if (text.toLowerCase().includes(phrase)) {
+          negativeCount += 2;
+          matchedWords.push(phrase);
+        }
+      });
+
+      const biasScore = Math.min(negativeCount / Math.max(words.length, 1), 1);
+      
+      return { negativeCount, matchedWords, biasScore, totalWords: words.length };
+    }
+
+    function runTest() {
+      const posts = document.querySelectorAll('.test-post');
+      let totalHighlights = 0;
+
+      posts.forEach(post => {
+        const text = post.querySelector('p').textContent;
+        const result = analyzePost(text);
+        
+        // Show stats
+        const scoreEl = post.querySelector('.bias-score');
+        scoreEl.innerHTML = `Matched: ${result.matchedWords.join(', ') || 'none'} | Score: ${result.biasScore.toFixed(2)}`;
+        
+        totalHighlights += result.negativeCount;
+      });
+
+      document.getElementById('stats').textContent = 
+        `Total potential highlights: ${totalHighlights} across ${posts.length} posts`;
+    }
+
+    function clearHighlights() {
+      document.querySelectorAll('.test-post .bias-score').forEach(el => {
+        el.textContent = el.dataset.original || '';
+      });
+      document.getElementById('stats').textContent = '';
+    }
+
+    // Store original scores
+    document.querySelectorAll('.bias-score').forEach(el => {
+      el.dataset.original = el.textContent;
+    });
+  </script>
+</body>
+</html>

@@ -4,7 +4,7 @@
 class Config {
   constructor() {
     this.settings = {
-      highlightThreshold: 0.3, // Minimum sentiment score magnitude to highlight
+      highlightThreshold: 0.15, // Minimum sentiment score magnitude to highlight
       colorScheme: 'default', // 'default', 'high-contrast', 'subtle'
       focusTopics: [], // Array of topic names to focus on (empty = all)
       customKeywords: {}, // User-defined custom keywords with sentiment weights

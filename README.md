@@ -13,7 +13,7 @@ A TamperMonkey extension that helps identify highly biased positions via sentime
   - Select different areas of concern/topics to monitor
   - Adjust sensitivity thresholds for highlighting
   - Customize color schemes and display preferences
-- **Targeted Analysis**: Specifically designed for monitoring Republican-leaning posts in local politics
+- **Default Sensitivity**: Lower threshold (0.15) for broader detection of emotionally manipulative language
 
 ## Installation
 
@@ -45,6 +45,21 @@ npm run lint
 npm run build
 ```
 
+## Adjusting Sensitivity
+
+If the extension is not sensitive enough:
+
+1. Click the "Bias Detector" button (top-left corner of any Facebook page)
+2. In the settings panel, lower the "Detection Sensitivity" slider (e.g., from 0.30 to 0.15)
+3. Enable additional topics under "Focus Areas" (Immigration, Economy, Elections, etc.)
+4. Enable "Topic-Specific Boosting" to amplify political keyword scores
+
+### Suggested Settings for Political Content Detection
+- **Threshold**: 0.10–0.15
+- **Topics**: Enable all 5 topics
+- **Focus**: Immigration, Elections, Security
+- **Color Scheme**: High Contrast
+
 ## Project Structure
 
 ```
@@ -69,7 +84,15 @@ npm run build
 
 ## Testing
 
+### Unit Tests
 Tests are located in the `tests/` directory and can be run with `npm test`.
+
+### Manual Testing
+A test page with sample posts of varying bias levels is available at `test/test-page.html`. Open it in a browser to verify highlighting behavior before deploying.
+
+### Suggested Test Environments
+- [Local test HTML](test/test-page.html) — best for verifying highlighting without Facebook
+- Facebook groups (e.g., "MAGA", "Stop the Steal", local political groups) — real-world sentiment validation
 
 ## License
 

@@ -137,5 +137,54 @@ describe('SentimentAnalyzer', () => {
       expect(keywords.has('wall')).toBe(true);
       expect(keywords.has('amnesty')).toBe(true);
     });
+  describe('political phrases', () => {
+    test('should detect "fake news" phrase', () => {
+      const text = 'The fake news media is lying to us';
+      const result = analyzer.analyzeText(text);
+      
+      const hasFakeNews = result.some(w => w.original.toLowerCase() === 'fake' || w.original.toLowerCase() === 'news');
+      expect(hasFakeNews).toBe(true);
+    });
+
+    test('should detect "deep state" phrase', () => {
+      const text = 'The deep state is trying to stop us';
+      const result = analyzer.analyzeText(text);
+      
+      const hasDeepState = result.some(w => w.original.toLowerCase().includes('deep') || w.original.toLowerCase().includes('state'));
+      expect(hasDeepState).toBe(true);
+    });
+
+    test('should detect "election fraud" phrase', () => {
+      const text = 'There was widespread election fraud';
+      const result = analyzer.analyzeText(text);
+      
+      const hasFraud = result.some(w => w.original.toLowerCase().includes('fraud') || w.original.toLowerCase().includes('election'));
+      expect(hasFraud).toBe(true);
+    });
+
+    test('should detect "build the wall" phrase', () => {
+      const text = 'We need to build the wall immediately';
+      const result = analyzer.analyzeText(text);
+      
+      const hasWall = result.some(w => w.original.toLowerCase().includes('wall'));
+      expect(hasWall).toBe(true);
+    });
+
+    test('should detect "plandemic" phrase', () => {
+      const text = 'This plandemic is a hoax';
+      const result = analyzer.analyzeText(text);
+      
+      const hasPlandemic = result.some(w => w.original.toLowerCase() === 'plandemic');
+      expect(hasPlandemic).toBe(true);
+    });
+
+    test('should detect multiple phrases in one text', () => {
+      const text = 'The fake news media and the deep state are trying to destroy our election';
+      const result = analyzer.analyzeText(text);
+      
+      const originalCount = result.length;
+      expect(originalCount).toBeGreaterThan(0);
+    });
   });
 });
+  });

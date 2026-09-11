@@ -31,7 +31,7 @@ describe('Config', () => {
       global.localStorage.getItem.mockReturnValue(null);
       const settings = await config.load();
       
-      expect(settings.highlightThreshold).toBe(0.3);
+      expect(settings.highlightThreshold).toBe(0.15);
       expect(settings.colorScheme).toBe('default');
     });
 
@@ -50,7 +50,7 @@ describe('Config', () => {
       
       const settings = await config.load();
       
-      expect(settings.highlightThreshold).toBe(0.3);
+      expect(settings.highlightThreshold).toBe(0.15);
     });
   });
 
