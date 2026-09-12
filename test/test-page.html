@@ -9,15 +9,22 @@
     .test-post { background: #f5f5f5; padding: 15px; margin: 10px 0; border-radius: 8px; }
     .test-post h3 { margin-top: 0; }
     .bias-score { font-size: 0.8em; color: #666; margin-top: 5px; }
-    .highlighted { padding: 2px 4px; border-radius: 2px; }
+    .highlighted { padding: 2px 4px; border-radius: 2px; background: rgba(255,0,0,0.1); }
     .controls { background: #e3f2fd; padding: 15px; margin-bottom: 20px; border-radius: 8px; }
     .controls label { display: block; margin: 8px 0; }
     button { padding: 8px 16px; margin-right: 10px; cursor: pointer; }
+    .env-info { background: #fff3e0; padding: 10px; border-radius: 4px; margin: 10px 0; border-left: 4px solid #ff9800; }
   </style>
 </head>
 <body>
   <h1>TamperMonkey Bias & Sentiment Visualizer - Test Page</h1>
   
+  <!-- Environment detection for both managers -->
+  <div id="env-info" class="env-info" style="display: none;">
+    <strong>Manager detected:</strong> <span id="env-type"></span><br>
+    <strong>Script URL:</strong> <span id="env-url"></span>
+  </div>
+
   <div class="controls">
     <label>
       <input type="checkbox" id="use-tampermonkey" checked>
@@ -67,6 +74,31 @@
   </div>
 
   <script>
+    // Environment detection for TamperMonkey/ViolentMonkey compatibility
+    function detectManager() {
+      const envInfo = {
+        type: 'none',
+        url: 'file://'
+      };
+      
+      if (typeof GM_info !== 'undefined' && GM_info.script) {
+        envInfo.type = GM_info.script.name || 'unknown';
+        envInfo.url = GM_info.script.location || 'unknown';
+      }
+      
+      // Also check for ViolentMonkey-specific properties
+      if (typeof unsafeWindow !== 'undefined') {
+        envInfo.unsafeWindowAvailable = true;
+      }
+      
+      return envInfo;
+    }
+    
+    const env = detectManager();
+    document.getElementById('env-type').textContent = env.type;
+    document.getElementById('env-url').textContent = env.url;
+    document.getElementById('env-info').style.display = 'block';
+    
     // Simple client-side analyzer for testing (mirrors TamperMonkey behavior)
     function analyzePost(text) {
       const negativeWords = new Set([

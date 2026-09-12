@@ -4,6 +4,7 @@ A TamperMonkey extension that helps identify highly biased positions via sentime
 
 ## Features
 
+- **TamperMonkey & ViolentMonkey Compatible**: Works in both userscript managers with `@compatible` directives
 - **Sentiment-Based Text Highlighting**: Automatically analyzes text content and highlights words based on their sentiment scores
 - **Customizable Color Coding**: 
   - Red for extremely concerning words (high negative sentiment/trigger words)

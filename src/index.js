@@ -11,10 +11,21 @@
 // @require      https://raw.githubusercontent.com/elijah/tampermonkey-bias-and-sentiment-visualizer/master/src/ui.js
 // @grant        none
 // @icon         data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAOAOw==
+// @compatible   tampermonkey
+// @compatible   violentmonkey
 // ==/UserScript==
 
 (function() {
   'use strict';
+
+  // Detect manager type
+  const isTamperMonkey = typeof GM_info !== 'undefined' && GM_info.script && GM_info.script.name;
+  const isViolentMonkey = typeof GM_info !== 'undefined' && GM_info.script && GM_info.script.name === 'ViolentMonkey';
+  const isScriptish = typeof GM_info !== 'undefined' && GM_info.script && GM_info.script.name === 'Scriptish';
+  
+  // Use unsafeWindow for ViolentMonkey/Scriptish to access page globals
+  const targetWindow = (isViolentMonkey || isScriptish) ? 
+    (typeof unsafeWindow !== 'undefined' ? unsafeWindow : window) : window;
 
   // Initialize sentiment analyzer
   const analyzer = new SentimentAnalyzer();
@@ -27,7 +38,7 @@
   function init() {
     config.load().then(() => {
       analyzer.init(config);
-      ui.init(config);
+      ui.init(config, analyzer);
       analyzer.observeDOM();
     });
   }
