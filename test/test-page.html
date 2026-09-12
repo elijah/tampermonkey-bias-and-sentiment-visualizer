@@ -9,7 +9,7 @@
     .test-post { background: #f5f5f5; padding: 15px; margin: 10px 0; border-radius: 8px; }
     .test-post h3 { margin-top: 0; }
     .bias-score { font-size: 0.8em; color: #666; margin-top: 5px; }
-    .highlighted { padding: 2px 4px; border-radius: 2px; background: rgba(255,0,0,0.1); }
+    .highlighted { padding: 2px 4px; border-radius: 2px; background: rgba(255,0,0,0.3); color: #8b0000; font-weight: bold; }
     .controls { background: #e3f2fd; padding: 15px; margin-bottom: 20px; border-radius: 8px; }
     .controls label { display: block; margin: 8px 0; }
     button { padding: 8px 16px; margin-right: 10px; cursor: pointer; }
@@ -195,6 +195,9 @@
         const text = post.querySelector('p').textContent;
         const result = analyzePost(text);
         
+        // Apply DOM highlighting (client-side only)
+        applyHighlighting(post, result);
+        
         // Show stats
         const scoreEl = post.querySelector('.bias-score');
         scoreEl.innerHTML = `Matched: ${result.matchedWords.join(', ') || 'none'} | Score: ${result.biasScore.toFixed(2)}`;
@@ -205,10 +208,40 @@
       document.getElementById('stats').textContent = 
         `Total potential highlights: ${totalHighlights} across ${posts.length} posts`;
     }
+    function applyHighlighting(postEl, result) {
+      const textEl = postEl.querySelector('p');
+      if (!textEl) return;
+      
+      const originalText = textEl.textContent;
+      const matchedWords = result.matchedWords;
+      
+      if (matchedWords.length === 0) {
+        // No highlighting needed
+        textEl.style.backgroundColor = '';
+        textEl.style.color = '';
+        return;
+      }
+      
+      // Simple approach: highlight entire words that match
+      const highlightedText = originalText.replace(
+        new RegExp(`(${matchedWords.map(w => escapeRegExp(w)).join('|')})`, 'gi'),
+        '<span class="highlighted">$1</span>'
+      );
+      
+      textEl.innerHTML = highlightedText;
+    }
+
+    function escapeRegExp(string) {
+      return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
 
     function clearHighlights() {
       document.querySelectorAll('.test-post .bias-score').forEach(el => {
         el.textContent = el.dataset.original || '';
+      });
+      // Remove highlighting
+      document.querySelectorAll('.test-post .highlighted').forEach(el => {
+        el.outerHTML = el.textContent;
       });
       document.getElementById('stats').textContent = '';
     }
