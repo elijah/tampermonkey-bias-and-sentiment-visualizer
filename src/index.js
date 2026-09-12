@@ -18,15 +18,6 @@
 (function() {
   'use strict';
 
-  // Detect manager type
-  const isTamperMonkey = typeof GM_info !== 'undefined' && GM_info.script && GM_info.script.name;
-  const isViolentMonkey = typeof GM_info !== 'undefined' && GM_info.script && GM_info.script.name === 'ViolentMonkey';
-  const isScriptish = typeof GM_info !== 'undefined' && GM_info.script && GM_info.script.name === 'Scriptish';
-  
-  // Use unsafeWindow for ViolentMonkey/Scriptish to access page globals
-  const targetWindow = (isViolentMonkey || isScriptish) ? 
-    (typeof unsafeWindow !== 'undefined' ? unsafeWindow : window) : window;
-
   // Initialize sentiment analyzer
   const analyzer = new SentimentAnalyzer();
   // Initialize user interface
